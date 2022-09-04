@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "module": "esnext",
+        "target": "esnext",
+        "strict": true,
+        "esModuleInterop": true,
+        "incremental": false,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "noUnusedLocals": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "types": [
+            "axios"
+        ]
+    },
+    "exclude": [
+        "dist",
+        "node_modules"
+    ]
+}
