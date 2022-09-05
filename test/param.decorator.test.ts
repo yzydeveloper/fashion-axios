@@ -1,6 +1,11 @@
 import 'reflect-metadata'
-import { ARGS_METADATA, Body } from '../src'
 import { describe, expect, test } from 'vitest'
+import { defineConfig, Body, Get, Query, ARGS_METADATA, Client } from '../src'
+
+defineConfig({
+    name: 'default',
+    baseURL: '',
+})
 
 describe('param decorator', () => {
     test('body', () => {
@@ -15,6 +20,21 @@ describe('param decorator', () => {
 
         expect(metadata[key]).toStrictEqual({
             index: 0
+        })
+    })
+
+    test('request and param', () => {
+        @Client()
+        class DecoratorOfReqAndParam {
+            @Get('/')
+            getName(
+                @Query() params: any
+            ) { }
+        }
+
+        const api = new DecoratorOfReqAndParam()
+        api.getName({
+            name: 'decorator'
         })
     })
 })

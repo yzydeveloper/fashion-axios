@@ -1,4 +1,6 @@
-import { PATH_METADATA, METHOD_METADATA } from './constants'
+import { PATH_METADATA, METHOD_METADATA, CLIENT_NAME_METADATA, ARGS_METADATA } from './constants'
+import { AxiosRequestConfig } from 'axios'
+import { clientMap } from './config'
 
 export enum RequestMethod {
     GET = 'get',
@@ -12,6 +14,8 @@ export interface RequestMappingMetadata {
     method?: RequestMethod
 }
 
+type IAxiosRequestConfig = Pick<AxiosRequestConfig, 'url' | 'method' | 'headers' | 'data' | 'params'>
+
 export function defineRequestMetadata(
     metadata: RequestMappingMetadata
 ) {
@@ -23,8 +27,20 @@ export function defineRequestMetadata(
         descriptor: TypedPropertyDescriptor<any>
     ) => {
         descriptor.value = (...args: unknown[]) => {
-            // Reflect.getMetadata(CLIENT_NAME_METADATA,target.constructor)
-            // Reflect.getMetadata(ARGS_METADATA, target.constructor, key)
+            const clientNameMetadata = Reflect.getMetadata(CLIENT_NAME_METADATA, target.constructor)
+            const argsMetadata = Reflect.getMetadata(ARGS_METADATA, target.constructor, key)
+            const axiosClient = clientMap.get(clientNameMetadata)
+            const axiosConfig = Object.entries(argsMetadata).reduce<IAxiosRequestConfig>((cfg, item) => {
+                const [set] = item
+                const [paramType, index] = set.split(':')
+                console.log('[paramType]', paramType)
+                console.log('[index]', index)
+                return cfg
+            }, {
+                url: path,
+                method,
+            })
+            axiosClient?.(axiosConfig)
         }
         Reflect.defineMetadata(PATH_METADATA, path, descriptor.value)
         Reflect.defineMetadata(METHOD_METADATA, method, descriptor.value)
