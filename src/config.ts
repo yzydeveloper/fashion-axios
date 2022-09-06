@@ -4,7 +4,7 @@ import { DEFAULT_CLIENT_NAME } from './constants'
 export const clientMap: Map<string, AxiosInstance> = new Map()
 
 export interface Options extends AxiosRequestConfig {
-    name: string
+    name?: string
 }
 
 export function defineConfig(config: Options | Options[]) {

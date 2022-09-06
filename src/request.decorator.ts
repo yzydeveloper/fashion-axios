@@ -40,7 +40,7 @@ export function defineRequestMetadata(
                 url: path,
                 method,
             })
-            axiosClient?.(axiosConfig)
+            return axiosClient?.(axiosConfig)
         }
         Reflect.defineMetadata(PATH_METADATA, path, descriptor.value)
         Reflect.defineMetadata(METHOD_METADATA, method, descriptor.value)
