@@ -1,5 +1,6 @@
+import type { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
 import { PATH_METADATA, METHOD_METADATA, CLIENT_NAME_METADATA, ARGS_METADATA } from './constants'
-import { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
+import Axios from 'axios'
 import { clientMap } from './config'
 import { Paramtypes } from './param.decorator'
 
@@ -17,6 +18,8 @@ export interface RequestMappingMetadata {
 
 type IAxiosRequestConfig = Pick<AxiosRequestConfig, 'url' | 'method' | 'headers' | 'data' | 'params'>
 
+const _defaultClient = Axios.create({})
+
 export function defineRequestMetadata(
     metadata: RequestMappingMetadata
 ) {
@@ -30,7 +33,7 @@ export function defineRequestMetadata(
         descriptor.value = (...args: unknown[]) => {
             const clientNameMetadata = Reflect.getMetadata(CLIENT_NAME_METADATA, target.constructor)
             const argsMetadata = Reflect.getMetadata(ARGS_METADATA, target.constructor, key)
-            const axiosClient = clientMap.get(clientNameMetadata)
+            const axiosClient = clientMap.get(clientNameMetadata) ?? _defaultClient
 
             const axiosConfig = Object.entries(argsMetadata).reduce<IAxiosRequestConfig>((cfg, item) => {
                 const [set] = item

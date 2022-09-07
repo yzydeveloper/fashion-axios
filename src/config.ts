@@ -1,4 +1,5 @@
-import Axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios'
+import type { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios'
+import Axios from 'axios'
 import { DEFAULT_CLIENT_NAME } from './constants'
 
 export const clientMap: Map<string, AxiosInstance> = new Map()

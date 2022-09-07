@@ -1,5 +1,5 @@
-import { clientMap } from './config'
 import { CLIENT_METADATA, CLIENT_NAME_METADATA, DEFAULT_CLIENT_NAME, BASE_URL_METADATA } from './constants'
+import { clientMap } from './config'
 
 export interface ClientParams {
     name?: string
