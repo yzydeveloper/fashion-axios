@@ -3,8 +3,8 @@
 Based on axios to implement a network request library that can use decorators, refer to [Nest](https://github.com/nestjs/nest)
 
 <p align="center">
-    <!-- <img width="80%" src="assets/config.png" /> -->
-    <img width="80%" src="assets/request.png" />
+    <!-- <img width="100%" src="assets/config.png" /> -->
+    <img width="100%" src="assets/request.png" />
 </p>
 
 ## Purpose
