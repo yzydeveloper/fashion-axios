@@ -34,6 +34,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@swc/core": "^1.2.248",
     "@yzydeveloper/eslint-config": "^0.1.4",
     "axios": "^0.27.2",
     "eslint": "^8.12.0",

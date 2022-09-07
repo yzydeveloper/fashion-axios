@@ -1,6 +1,7 @@
 import { PATH_METADATA, METHOD_METADATA, CLIENT_NAME_METADATA, ARGS_METADATA } from './constants'
-import { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
 import { clientMap } from './config'
+import { Paramtypes } from './param.decorator'
 
 export enum RequestMethod {
     GET = 'get',
@@ -30,11 +31,21 @@ export function defineRequestMetadata(
             const clientNameMetadata = Reflect.getMetadata(CLIENT_NAME_METADATA, target.constructor)
             const argsMetadata = Reflect.getMetadata(ARGS_METADATA, target.constructor, key)
             const axiosClient = clientMap.get(clientNameMetadata)
+
             const axiosConfig = Object.entries(argsMetadata).reduce<IAxiosRequestConfig>((cfg, item) => {
                 const [set] = item
                 const [paramType, index] = set.split(':')
-                console.log('[paramType]', paramType)
-                console.log('[index]', index)
+                const value = args[parseInt(index, 10)]
+
+                if (paramType === Paramtypes.BODY) {
+                    cfg.data = value
+                }
+                if (paramType === Paramtypes.QUERY) {
+                    cfg.params = value
+                }
+                if (paramType === Paramtypes.HEADER) {
+                    cfg.headers = value as AxiosRequestHeaders
+                }
                 return cfg
             }, {
                 url: path,

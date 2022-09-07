@@ -23,18 +23,19 @@ describe('param decorator', () => {
         })
     })
 
-    test('request and param', () => {
+    test('validate param', () => {
         @Client()
         class DecoratorOfReqAndParam {
             @Get('/')
             getName(
-                @Query() params: any
+                @Query() params: { id: string, name: string }
             ) { }
         }
 
         const api = new DecoratorOfReqAndParam()
         api.getName({
-            name: 'decorator'
+            id: 'id',
+            name: 'name'
         })
     })
 })

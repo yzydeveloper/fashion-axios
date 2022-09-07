@@ -5,5 +5,6 @@ export default defineConfig(() => ({
     splitting: true,
     clean: true,
     dts: true,
-    format: ['esm', 'cjs']
+    format: ['esm', 'cjs'],
+    external: ['axios']
 }))
