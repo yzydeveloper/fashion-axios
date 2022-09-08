@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
+import type { AxiosRequestConfig } from 'axios'
 import { PATH_METADATA, METHOD_METADATA, CLIENT_NAME_METADATA, ARGS_METADATA } from './constants'
 import Axios from 'axios'
 import { clientMap } from './config'
@@ -18,6 +18,10 @@ export interface RequestMappingMetadata {
 
 type IAxiosRequestConfig = Pick<AxiosRequestConfig, 'url' | 'method' | 'headers' | 'data' | 'params'>
 
+function isObject(value: unknown): value is Record<string, any> {
+    return Object.prototype.toString.call(value) === '[object Object]'
+}
+
 const _defaultClient = Axios.create({})
 
 export function defineRequestMetadata(
@@ -30,24 +34,55 @@ export function defineRequestMetadata(
         key: string,
         descriptor: TypedPropertyDescriptor<any>
     ) => {
-        descriptor.value = (...args: unknown[]) => {
+        descriptor.value = (...args: any[]) => {
             const clientNameMetadata = Reflect.getMetadata(CLIENT_NAME_METADATA, target.constructor)
             const argsMetadata = Reflect.getMetadata(ARGS_METADATA, target.constructor, key)
             const axiosClient = clientMap.get(clientNameMetadata) ?? _defaultClient
 
-            const axiosConfig = Object.entries(argsMetadata).reduce<IAxiosRequestConfig>((cfg, item) => {
-                const [set] = item
-                const [paramType, index] = set.split(':')
+            const axiosConfig = Object.entries<{
+                property: string | undefined,
+                index: number
+            }>(argsMetadata).reduce<IAxiosRequestConfig>((cfg, item) => {
+                const [metakey, metavalue] = item
+                const [paramType, index] = metakey.split(':')
+                const { property } = metavalue
                 const value = args[parseInt(index, 10)]
 
                 if (paramType === Paramtypes.BODY) {
-                    cfg.data = value
+                    if (!isObject(value) && !property) {
+                        throw new Error('body is missing property')
+                    }
+
+                    if (property) {
+                        cfg.data = Object.assign(cfg.data ?? {}, { [property]: value })
+                    } else {
+                        cfg.data = Object.assign(cfg.data ?? {}, value)
+                    }
                 }
                 if (paramType === Paramtypes.QUERY) {
-                    cfg.params = value
+                    if (!isObject(value) && !property) {
+                        throw new Error('query is missing property')
+                    }
+
+                    if (property) {
+                        cfg.params = Object.assign(cfg.params ?? {}, { [property]: value })
+                    } else {
+                        cfg.params = Object.assign(cfg.params ?? {}, value)
+                    }
                 }
                 if (paramType === Paramtypes.HEADER) {
-                    cfg.headers = value as AxiosRequestHeaders
+                    if (!isObject(value) && !property) {
+                        throw new Error('header is missing property')
+                    }
+
+                    if (property) {
+                        cfg.headers = Object.assign(cfg.headers ?? {}, { [property]: value })
+                    } else {
+                        cfg.headers = Object.assign(cfg.headers ?? {}, value)
+                    }
+                }
+                if(paramType === Paramtypes.PATH) {
+                    // ...
                 }
                 return cfg
             }, {
