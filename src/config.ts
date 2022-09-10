@@ -38,6 +38,10 @@ function createClient(config: Options) {
     return client
 }
 
+export function useClient(name?: string) {
+    return clientMap.get(name ?? DEFAULT_CLIENT_NAME)
+}
+
 export function defineConfig(config: Options | Options[]) {
     if (!Array.isArray(config)) {
         clientMap.set(config.name || DEFAULT_CLIENT_NAME, createClient(config))
