@@ -9,7 +9,7 @@ Based on axios to implement a network request library that can use decorators, r
 
 ## Purpose
 
-Define the Api in the project in a fashionable way, maybe it can be extended to other more interesting experiments?
+Another way to manage APIs in a project, maybe expand to other more interesting experiments?
 
 ## Install
 
