@@ -50,7 +50,7 @@ export function defineRequestMetadata(
 
                 if (paramType === Paramtypes.BODY) {
                     if (!isObject(value) && !property) {
-                        throw new Error('body is missing property')
+                        throw new Error('body is missing unique key')
                     }
 
                     if (property) {
@@ -61,7 +61,7 @@ export function defineRequestMetadata(
                 }
                 if (paramType === Paramtypes.QUERY) {
                     if (!isObject(value) && !property) {
-                        throw new Error('query is missing property')
+                        throw new Error('query is missing unique key')
                     }
 
                     if (property) {
@@ -72,7 +72,7 @@ export function defineRequestMetadata(
                 }
                 if (paramType === Paramtypes.HEADER) {
                     if (!isObject(value) && !property) {
-                        throw new Error('header is missing property')
+                        throw new Error('header is missing unique key')
                     }
 
                     if (property) {
@@ -81,8 +81,12 @@ export function defineRequestMetadata(
                         cfg.headers = Object.assign(cfg.headers ?? {}, value)
                     }
                 }
-                if(paramType === Paramtypes.PATH) {
-                    // ...
+                if (paramType === Paramtypes.PATH) {
+                    if (!property) {
+                        throw new Error('path is missing unique key')
+                    }
+                    const url = path.replace(`:${property}`, value)
+                    cfg.url = url
                 }
                 return cfg
             }, {

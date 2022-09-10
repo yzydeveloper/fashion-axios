@@ -7,7 +7,7 @@ export enum Paramtypes {
     HEADER = 'HEADER'
 }
 
-export function assignMetadata<TParamtype = any, TArgs = any>(
+export function assignMetadata<TParamtype extends keyof typeof Paramtypes, TArgs = any>(
     args: TArgs,
     paramtype: TParamtype,
     index: number,
@@ -44,5 +44,7 @@ function createParamDecorator(
 export const Body = (property?: string) => createParamDecorator(Paramtypes.BODY)(property)
 
 export const Query = (property?: string) => createParamDecorator(Paramtypes.QUERY)(property)
+
+export const Path = (property?: string) => createParamDecorator(Paramtypes.PATH)(property)
 
 export const Header = (property?: string) => createParamDecorator(Paramtypes.HEADER)(property)

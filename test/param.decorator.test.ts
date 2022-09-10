@@ -19,7 +19,8 @@ describe('param decorator', () => {
         const key = Object.keys(metadata)[0]
 
         expect(metadata[key]).toStrictEqual({
-            index: 0
+            index: 0,
+            property: undefined
         })
     })
 
