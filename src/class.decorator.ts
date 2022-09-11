@@ -15,6 +15,6 @@ export function Client(params?: ClientParams) {
 
 export function Api(baseUrl?: string) {
     return (target: object) => {
-        Reflect.defineMetadata(BASE_URL_METADATA, baseUrl || '/', target)
+        Reflect.defineMetadata(BASE_URL_METADATA, baseUrl || '', target)
     }
 }

@@ -1,5 +1,5 @@
 import type { AxiosRequestConfig } from 'axios'
-import { PATH_METADATA, METHOD_METADATA, CLIENT_NAME_METADATA, ARGS_METADATA } from './constants'
+import { PATH_METADATA, METHOD_METADATA, CLIENT_NAME_METADATA, ARGS_METADATA, DEFAULT_CLIENT_NAME, BASE_URL_METADATA } from './constants'
 import Axios from 'axios'
 import { clientMap } from './config'
 import { Paramtypes } from './param.decorator'
@@ -27,7 +27,7 @@ const _defaultClient = Axios.create({})
 export function defineRequestMetadata(
     metadata: RequestMappingMetadata
 ) {
-    const path = metadata.path || '/'
+    let path = metadata.path || '/'
     const method = metadata.method || RequestMethod.GET
     return (
         target: object,
@@ -35,9 +35,11 @@ export function defineRequestMetadata(
         descriptor: TypedPropertyDescriptor<any>
     ) => {
         descriptor.value = (...args: any[]) => {
-            const clientNameMetadata = Reflect.getMetadata(CLIENT_NAME_METADATA, target.constructor)
-            const argsMetadata = Reflect.getMetadata(ARGS_METADATA, target.constructor, key)
+            const clientNameMetadata = Reflect.getMetadata(CLIENT_NAME_METADATA, target.constructor) ?? DEFAULT_CLIENT_NAME
+            const argsMetadata = Reflect.getMetadata(ARGS_METADATA, target.constructor, key) ?? {}
             const axiosClient = clientMap.get(clientNameMetadata) ?? _defaultClient
+            const baseUrl = Reflect.getMetadata(BASE_URL_METADATA, target.constructor)
+            path = `${baseUrl}${path}`
 
             const axiosConfig = Object.entries<{
                 property: string | undefined,
