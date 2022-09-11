@@ -90,6 +90,17 @@ export function defineRequestMetadata(
                     const url = path.replace(`:${property}`, value)
                     cfg.url = url
                 }
+                if (paramType === Paramtypes.FORM_DATA) {
+                    let formData = new FormData()
+                    if (value instanceof FormData) {
+                        formData = value
+                    } else {
+                        Object.keys(value).forEach(key => {
+                            formData.append(key, value[key])
+                        })
+                    }
+                    cfg.data = formData
+                }
                 return cfg
             }, {
                 url: path,
