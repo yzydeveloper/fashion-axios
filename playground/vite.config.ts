@@ -18,6 +18,14 @@ export default defineConfig({
                     ['@babel/plugin-proposal-class-properties', { loose: true }],
                 ]
             }
-        })
+        }),
+        {
+            name: 'vite-plugin-server',
+            configureServer({ httpServer }) {
+                httpServer?.on('request', (req) => {
+                    console.log(req.url, '>>>', req.method)
+                })
+            }
+        }
     ]
 })
