@@ -10,6 +10,7 @@ export default defineConfig({
     },
     plugins: [
         VuePlugin(),
+        // If it is `js` to use the decorator, it needs to be configured
         BabelPlugin({
             babel: {
                 plugins: [
