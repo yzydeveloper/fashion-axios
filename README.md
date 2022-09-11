@@ -14,9 +14,10 @@ Another way to manage APIs in a project, maybe expand to other more interesting 
 ## Install
 
 ```bash
-
 pnpm install fashion-axios -s
 ```
+
+Before starting, you need to make sure that `experimentalDecorators` and `emitDecoratorMetadata` are set to true in tsconfig.json.
 
 ## Class Decorator
 
