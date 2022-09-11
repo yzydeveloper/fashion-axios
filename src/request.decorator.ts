@@ -48,55 +48,63 @@ export function defineRequestMetadata(
                 const [metakey, metavalue] = item
                 const [paramType, index] = metakey.split(':')
                 const { property } = metavalue
-                const value = args[parseInt(index, 10)]
+                const argValue = args[parseInt(index, 10)]
 
                 if (paramType === Paramtypes.BODY) {
-                    if (!isObject(value) && !property) {
+                    if (!isObject(argValue) && !property) {
                         throw new Error('body is missing unique key')
                     }
 
                     if (property) {
-                        cfg.data = Object.assign(cfg.data ?? {}, { [property]: value })
+                        cfg.data = Object.assign(cfg.data ?? {}, { [property]: argValue })
                     } else {
-                        cfg.data = Object.assign(cfg.data ?? {}, value)
+                        cfg.data = Object.assign(cfg.data ?? {}, argValue)
                     }
                 }
                 if (paramType === Paramtypes.QUERY) {
-                    if (!isObject(value) && !property) {
+                    if (!isObject(argValue) && !property) {
                         throw new Error('query is missing unique key')
                     }
 
                     if (property) {
-                        cfg.params = Object.assign(cfg.params ?? {}, { [property]: value })
+                        cfg.params = Object.assign(cfg.params ?? {}, { [property]: argValue })
                     } else {
-                        cfg.params = Object.assign(cfg.params ?? {}, value)
+                        cfg.params = Object.assign(cfg.params ?? {}, argValue)
                     }
                 }
                 if (paramType === Paramtypes.HEADER) {
-                    if (!isObject(value) && !property) {
+                    if (!isObject(argValue) && !property) {
                         throw new Error('header is missing unique key')
                     }
 
                     if (property) {
-                        cfg.headers = Object.assign(cfg.headers ?? {}, { [property]: value })
+                        cfg.headers = Object.assign(cfg.headers ?? {}, { [property]: argValue })
                     } else {
-                        cfg.headers = Object.assign(cfg.headers ?? {}, value)
+                        cfg.headers = Object.assign(cfg.headers ?? {}, argValue)
                     }
                 }
                 if (paramType === Paramtypes.PATH) {
                     if (!property) {
                         throw new Error('path is missing unique key')
                     }
-                    const url = path.replace(`:${property}`, value)
+                    const url = path.replace(`:${property}`, argValue)
                     cfg.url = url
                 }
                 if (paramType === Paramtypes.FORM_DATA) {
                     let formData = new FormData()
-                    if (value instanceof FormData) {
-                        formData = value
+                    if (argValue instanceof FormData) {
+                        formData = argValue
                     } else {
-                        Object.keys(value).forEach(key => {
-                            formData.append(key, value[key])
+                        Object.keys(argValue).forEach(key => {
+                            const value = argValue[key]
+                            if (Array.isArray(value)) {
+                                value.forEach((item) => {
+                                    formData.append(`${key}[]`, item)
+                                })
+                                return
+                            }
+
+                            formData.append(key, argValue[key])
                         })
                     }
                     cfg.data = formData
