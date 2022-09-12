@@ -57,10 +57,6 @@ export function defineRequestMetadata(
                 const argValue = args[parseInt(index, 10)]
 
                 if (paramType === Paramtypes.BODY) {
-                    if (!isObject(argValue) && !property) {
-                        throw new Error('body is missing unique key')
-                    }
-
                     if (property) {
                         cfg.data = Object.assign(cfg.data ?? {}, { [property]: argValue })
                     } else {
