@@ -21,6 +21,8 @@ Before starting, you need to make sure that `experimentalDecorators` and `emitDe
 
 ## Configure
 
+refer to [playground](/playground/src/main.ts)
+
 Declare configuration before loading your program
 
 ```typescript
