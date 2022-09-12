@@ -11,6 +11,12 @@ export enum RequestMethod {
     DELETE = 'delete'
 }
 
+export enum ContentTypeEnum {
+    JSON = 'application/json;charset=UTF-8',
+    FORM_URLENCODED = 'application/x-www-form-urlencoded;charset=UTF-8',
+    FORM_DATA = 'multipart/form-data;charset=UTF-8',
+}
+
 export interface RequestMappingMetadata {
     path?: string
     method?: RequestMethod
@@ -113,6 +119,9 @@ export function defineRequestMetadata(
             }, {
                 url: path,
                 method,
+                headers: {
+                    'Content-type': ContentTypeEnum.JSON
+                }
             })
             return axiosClient?.(axiosConfig)
         }
