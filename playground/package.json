@@ -16,6 +16,7 @@
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.16.7",
         "@babel/plugin-proposal-decorators": "^7.17.9",
+        "@types/node": "^18.7.16",
         "@vitejs/plugin-vue": "^3.1.0",
         "vite": "^3.0.0",
         "vite-plugin-babel-compiler": "^0.3.0"
