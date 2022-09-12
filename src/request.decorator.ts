@@ -5,10 +5,10 @@ import { clientMap } from './config'
 import { Paramtypes } from './param.decorator'
 
 export enum RequestMethod {
-    GET = 'get',
-    POST = 'post',
-    PUT = 'put',
-    DELETE = 'delete'
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    DELETE = 'DELETE'
 }
 
 export enum ContentTypeEnum {

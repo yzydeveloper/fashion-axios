@@ -9,7 +9,9 @@ defineConfig({
     interceptorConfig: {
         request: {
             onFulfilled(config) {
-                if(config.method === 'Get') { config.url += `${(config.url?.indexOf('?') ?? -1) < 0 ? '?' : '&'}t=${Date.now()}` }
+                if(config.method === 'get') {
+                    config.url += `${(config.url?.indexOf('?') ?? -1) < 0 ? '?' : '&'}t=${Date.now()}`
+                }
                 return config
             },
         },

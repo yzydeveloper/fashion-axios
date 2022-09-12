@@ -20,19 +20,21 @@ export default defineConfig({
     plugins: [
         VuePlugin(),
         // If it is `js` to use the decorator, it needs to be configured
-        BabelPlugin({
-            babel: {
-                plugins: [
-                    ['@babel/plugin-proposal-decorators', { legacy: true }],
-                    ['@babel/plugin-proposal-class-properties', { loose: true }],
-                ]
-            }
-        }),
+        // BabelPlugin({
+        //     babel: {
+        //         plugins: [
+        //             ['@babel/plugin-proposal-decorators', { legacy: true }],
+        //             ['@babel/plugin-proposal-class-properties', { loose: true }],
+        //         ]
+        //     }
+        // }),
         {
             name: 'vite-plugin-server',
             configureServer({ httpServer }) {
                 httpServer?.on('request', (req, res) => {
-                    if (req.url === '/api/custom/list' && req.method === 'GET') {
+                    const url = req.url?.split('?')[0]
+
+                    if (url === '/api/custom/list' && req.method === 'GET') {
                         res.end(JSON.stringify([{
                             id: '1',
                             name: 'test1'
@@ -42,7 +44,7 @@ export default defineConfig({
                         }]))
                     }
 
-                    if (req.url === '/api/custom/create' && req.method === 'POST') {
+                    if (url === '/api/custom/add' && req.method === 'POST') {
                         let bf = ''
                         req.on('data', (chunk) => {
                             bf += chunk
@@ -53,7 +55,7 @@ export default defineConfig({
                         })
                     }
 
-                    if (req.url === '/api/custom/delete') {
+                    if (url === '/api/custom/delete' && req.method === 'DELETE') {
                         res.end()
                     }
                 })

@@ -18,8 +18,8 @@ class Custom {
     @Get('/list')
     list(): Promise<CustomListModel> { }
 
-    @Post('/create')
-    create<T>(
+    @Post('/add')
+    add<T>(
         @Body() body: CustomCreateBody
     ): Promise<T> { }
 

@@ -6,7 +6,7 @@ import { CustomApi } from './api/custom'
 
 CustomApi.list()
 
-CustomApi.create<{ name: string }>({
+CustomApi.add<{ name: string }>({
     name: 'test3'
 })
 
