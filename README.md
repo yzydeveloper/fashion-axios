@@ -19,6 +19,30 @@ pnpm install fashion-axios -s
 
 Before starting, you need to make sure that `experimentalDecorators` and `emitDecoratorMetadata` are set to true in tsconfig.json.
 
+## Configure
+
+Declare configuration before loading your program
+
+```typescript
+import { defineConfig } from 'fashion-axios'
+
+defineConfig({
+    baseURL: '',
+    headers: {}
+})
+
+defineConfig([
+    {
+        baseURL: '',
+        headers: {}
+    },{
+        name:"",
+        baseURL: '',
+        headers: {}
+    }
+])
+```
+
 ## Class Decorator
 
 ### @Api
