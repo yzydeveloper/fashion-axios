@@ -116,7 +116,7 @@ export function defineRequestMetadata(
                 url: path,
                 method,
                 headers: {
-                    'Content-type': ContentTypeEnum.JSON
+                    'Content-Type': ContentTypeEnum.JSON
                 }
             })
             return axiosClient?.(axiosConfig)
