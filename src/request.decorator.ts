@@ -33,7 +33,7 @@ const _defaultClient = Axios.create({})
 export function defineRequestMetadata(
     metadata: RequestMappingMetadata
 ) {
-    let path = metadata.path || '/'
+    const rawPath = metadata.path || '/'
     const method = metadata.method || RequestMethod.GET
     return (
         target: object,
@@ -45,7 +45,7 @@ export function defineRequestMetadata(
             const argsMetadata = Reflect.getMetadata(ARGS_METADATA, target.constructor, key) ?? {}
             const axiosClient = clientMap.get(clientNameMetadata) ?? _defaultClient
             const baseUrl = Reflect.getMetadata(BASE_URL_METADATA, target.constructor)
-            path = `${baseUrl}${path}`
+            const path = `${baseUrl}${rawPath}`
 
             const axiosConfig = Object.entries<{
                 property: string | undefined,
@@ -121,7 +121,7 @@ export function defineRequestMetadata(
             })
             return axiosClient?.(axiosConfig)
         }
-        Reflect.defineMetadata(PATH_METADATA, path, descriptor.value)
+        Reflect.defineMetadata(PATH_METADATA, rawPath, descriptor.value)
         Reflect.defineMetadata(METHOD_METADATA, method, descriptor.value)
         return descriptor
     }
