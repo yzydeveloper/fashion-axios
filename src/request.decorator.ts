@@ -33,7 +33,7 @@ const _defaultClient = Axios.create({})
 export function defineRequestMetadata(
     metadata: RequestMappingMetadata
 ) {
-    const rawPath = metadata.path || '/'
+    const rawPath = metadata.path || ''
     const method = metadata.method || RequestMethod.GET
     return (
         target: object,
@@ -45,7 +45,16 @@ export function defineRequestMetadata(
             const argsMetadata = Reflect.getMetadata(ARGS_METADATA, target.constructor, key) ?? {}
             const axiosClient = clientMap.get(clientNameMetadata) ?? _defaultClient
             const baseUrl = Reflect.getMetadata(BASE_URL_METADATA, target.constructor)
-            const path = `${baseUrl}${rawPath}`
+
+            // 去除开头和结尾的斜杠
+            const normalizedBaseUrl = baseUrl ? baseUrl.replace(/^\/+|\/+$/g, '') : ''
+            const normalizedRawPath = rawPath ? rawPath.replace(/^\/+|\/+$/g, '') : ''
+            // eslint-disable-next-line no-nested-ternary
+            const path = normalizedBaseUrl
+                ? normalizedRawPath
+                    ? `/${normalizedBaseUrl}/${normalizedRawPath}` // 如果 rawPath 存在，拼接 /baseUrl/rawPath
+                    : `/${normalizedBaseUrl}` // 如果 rawPath 为空，只返回 /baseUrl
+                : `/${normalizedRawPath}` // 如果 baseUrl 为空，只返回 /rawPath
 
             const axiosConfig = Object.entries<{
                 property: string | undefined,
@@ -128,7 +137,7 @@ export function defineRequestMetadata(
 }
 
 function createRequestDecorator(method: RequestMethod) {
-    return (path: string) => defineRequestMetadata({
+    return (path?: string) => defineRequestMetadata({
         path,
         method
     })
