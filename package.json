@@ -1,6 +1,6 @@
 {
   "name": "fashion-axios",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "axios using decorators",
   "keywords": [
     "fashion-axios",
