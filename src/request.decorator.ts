@@ -74,7 +74,7 @@ export function defineRequestMetadata(
                 }
                 if (paramType === Paramtypes.QUERY) {
                     if (!isObject(argValue) && !property) {
-                        throw new Error('query is missing unique key')
+                        // throw new Error('query is missing unique key')
                     }
 
                     if (property) {
@@ -85,7 +85,7 @@ export function defineRequestMetadata(
                 }
                 if (paramType === Paramtypes.HEADER) {
                     if (!isObject(argValue) && !property) {
-                        throw new Error('header is missing unique key')
+                        // throw new Error('header is missing unique key')
                     }
 
                     if (property) {
@@ -96,7 +96,7 @@ export function defineRequestMetadata(
                 }
                 if (paramType === Paramtypes.PATH) {
                     if (!property) {
-                        throw new Error('path is missing unique key')
+                        // throw new Error('path is missing unique key')
                     }
                     const url = path.replace(`:${property}`, argValue)
                     cfg.url = url
