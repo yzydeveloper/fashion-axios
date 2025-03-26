@@ -50,7 +50,7 @@ export function defineRequestMetadata(
             const normalizedBaseUrl = baseUrl ? baseUrl.replace(/^\/+|\/+$/g, '') : ''
             const normalizedRawPath = rawPath ? rawPath.replace(/^\/+|\/+$/g, '') : ''
             // eslint-disable-next-line no-nested-ternary
-            const path = normalizedBaseUrl
+            let path = normalizedBaseUrl
                 ? normalizedRawPath
                     ? `/${normalizedBaseUrl}/${normalizedRawPath}` // 如果 rawPath 存在，拼接 /baseUrl/rawPath
                     : `/${normalizedBaseUrl}` // 如果 rawPath 为空，只返回 /baseUrl
@@ -98,8 +98,8 @@ export function defineRequestMetadata(
                     if (!property) {
                         // throw new Error('path is missing unique key')
                     }
-                    const url = path.replace(`:${property}`, argValue)
-                    cfg.url = url
+                    path = path.replace(`:${property}`, argValue)
+                    cfg.url = path
                 }
                 if (paramType === Paramtypes.FORM_DATA) {
                     let formData = new FormData()
