@@ -39,7 +39,13 @@ function createClient(config: Options) {
 }
 
 export function useClient(name?: string) {
-    return clientMap.get(name ?? DEFAULT_CLIENT_NAME)
+    const clientName = name ?? DEFAULT_CLIENT_NAME
+
+    if (!clientMap.has(clientName)) {
+        return createClient({})
+    }
+
+    return clientMap.get(clientName)!
 }
 
 export function defineConfig(config: Options | Options[]) {
