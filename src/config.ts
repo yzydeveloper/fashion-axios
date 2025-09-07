@@ -38,14 +38,27 @@ function createClient(config: Options) {
     return client
 }
 
-export function useClient(name?: string) {
+// 保证每次调用都是使用的最新的 `client`
+export function useClient<T extends AxiosInstance = AxiosInstance>(name?: string): T {
     const clientName = name ?? DEFAULT_CLIENT_NAME
 
-    if (!clientMap.has(clientName)) {
-        return createClient({})
-    }
+    return new Proxy({} as T, {
+        get(_, prop: string) {
+            const client = clientMap.get(clientName) ?? Axios.create()
+            const value = (client as any)[prop]
 
-    return clientMap.get(clientName)!
+            if (typeof value === 'function') {
+                return (...args: any[]) => value.apply(client, args)
+            }
+
+            return value
+        },
+        set(_, prop: string, val: any) {
+            const client = clientMap.get(clientName) ?? Axios.create();
+            (client as any)[prop] = val
+            return true
+        }
+    })
 }
 
 export function defineConfig(config: Options | Options[]) {
